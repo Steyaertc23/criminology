@@ -17,7 +17,7 @@ This guide helps you install Docker, Docker Compose, and deploy the Django Crimi
 
 ## What’s in This Repository
 
-- Zip Folders: `Ubuntu18.04.zip`, `Ubuntu20.04.zip`, `Ubuntu22.04.zip`, `Ubuntu24.04.zip`
+- Zip Folders: `Ubuntu18.04.zip`, `Ubuntu20.04.zip`, `Ubuntu22.04.zip`, `Ubuntu24.04.zip` <br/>
   Contains Docker Engine and Docker Compose `.deb` packages for Ubuntu **18.04 through 24.04** Respectively, including:
 
   - `docker-ce_<version>.deb`
@@ -25,7 +25,7 @@ This guide helps you install Docker, Docker Compose, and deploy the Django Crimi
   - `containerd.io_<version>.deb`
   - `docker-compose-plugin_<version>.deb`
 
-- A zip folder: `start-up.zip`
+- A zip folder: `start-up.zip`<br/>
   Contains items to run `docker compose` including
 
   - `docker-compose.yaml`
@@ -190,4 +190,4 @@ Do the same for any teacher. The Students can be made on the site once the staff
 ---
 ## Issues
 
-Having Issues? Add an issue on GitHub.- [Offline Docker + Django Criminology Deployment]
+Having Issues? [Add an issue on GitHub.](https://github.com/Steyaertc23/criminology/issues)
