@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Set New Password{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Reset Your Password</h2>
+  <p class="text-center text-muted">Choose a strong new password for your account.</p>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="new_password" class="form-label">New Password</label>
+      <input type="password" name="new_password" id="new_password" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <small class="form-text text-muted">
+        Password must be at least 8 characters and include a mix of letters, numbers, and symbols.
+      </small>
+    </div>
+    <div class="mb-3">
+      <label for="new_password_confirm" class="form-label">Confirm New Password</label>
+      <input type="password" name="new_password_confirm" id="new_password_confirm" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">Reset Password</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - criminology_net
+    restart: unless-stopped
+
+  website:
+    image: steyaertc23/criminology:latest
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env.prod
+    volumes:
+      - ./staticfiles/:/staticfiles/
+    networks:
+      - criminology_net
+    expose:
+      - "8000" # Expose Django's port internally for nginx to access
+
+  db:
+    image: postgres:17
+    container_name: criminology_db
+    expose:
+      - "5432"
+    volumes:
+      - /srv/postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    networks:
+      - criminology_net
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80" # Expose port 80 on host
+    depends_on:
+      - website
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro # Mount your nginx config here
+      - ./staticfiles/:/app/static
+    networks:
+      - criminology_net
+    restart: unless-stopped
+
+  celery:
+    image: steyaertc23/criminology:latest
+    command: celery -A criminology worker --loglevel=info
+    depends_on:
+      - website
+      - redis
+    networks:
+      - criminology_net
+
+  celery-beat:
+    image: steyaertc23/criminology:latest
+    command: celery -A criminology beat --loglevel=info
+    volumes:
+      - ./beat-schedule:/app/beat-schedule
+    depends_on:
+      - website
+      - redis
+    networks:
+      - criminology_net
+
+networks:
+  criminology_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.1.0/24
+          gateway: 172.22.1.1

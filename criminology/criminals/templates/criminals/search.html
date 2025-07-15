@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  {% if not criminals %}
+    <p class="h4 text-warning text-center">No results found for "{{ query }}"</p>
+  {% else %}
+    {% for criminal in criminals %}
+      <div class="card mb-3">
+        <div class="card-header">
+          {{ criminal.first_name }} {{ criminal.last_name }}
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for link in criminal.offenses.all %}
+            {% with offense=link.offense %}
+              <li class="list-group-item">
+                {{ offense.get_offense_type_display }} –
+                {{ offense.get_offense_class_display }}<br>
+                <small>{{ offense.description }}</small>
+              </li>
+            {% endwith %}
+          {% empty %}
+            <li class="list-group-item text-muted">No offenses recorded</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}

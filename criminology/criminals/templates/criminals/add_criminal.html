@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% load form_filters %} {% block title %}Add
+Criminal{% endblock %} {% block content %}
+<div class="container">
+  <h2 class="text-center">Add New Criminal</h2>
+
+  <form method="POST" novalidate>
+    {% csrf_token %}
+
+    <h4 class="mt-4">Criminal Details</h4>
+    <div class="mb-3 form-floating">
+      {{ criminal_form.first_name|add_class:"form-control bg-dark text-light" }}
+      <label for="id_first_name">First Name</label>
+    </div>
+    <div class="mb-3 form-floating">
+      {{ criminal_form.last_name|add_class:"form-control bg-dark text-light" }}
+      <label for="id_last_name">Last Name</label>
+    </div>
+
+    <h4 class="mt-4">Offense Details</h4>
+    <div class="mb-3 form-floating">
+      {{ offense_form.offense_type|add_class:"form-select" }}
+      <label for="id_offense_type" class="form-label">Offense Type</label>
+    </div>
+    <div class="mb-3 form-floating">
+      <select
+        name="{{ offense_form.offense_class.html_name }}"
+        id="id_offense_class"
+        class="form-select"
+        data-selected="{{ offense_form.data.offense_class|default_if_none:'' }}"
+        disabled
+      >
+        <!-- Options populated by criminology.js -->
+      </select>
+      <label for="id_offense_class">Offense Class</label>
+    </div>
+    <div class="mb-3 form-floating">
+      {{ offense_form.description|add_class:"form-control bg-dark text-light" }}
+      <label for="id_description">Description</label>
+    </div>
+    <div class="mb-3">
+      <label for="id_offense_source" class="form-label">Offense Source</label>
+      {{ offense_form.offense_source|add_class:"form-select" }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+{% endblock %}

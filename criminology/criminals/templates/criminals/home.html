@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block homeClass %}active{% endblock %}
+
+{% block content %}
+<div class="container text-center my-5">
+  <h1 class="mb-4">Welcome to the DJH Criminal Database Dashboard</h1>
+  
+  <div class="row g-3">
+    <div class="col">
+      <a href="{% url 'all' %}" class="btn btn-light w-100">All Criminals</a>
+    </div>
+    <div class="col">
+      <a href="{% url 'federal_felony_crimes' %}" class="btn btn-danger w-100">Federal Felonies</a>
+    </div>
+    <div class="col">
+      <a href="{% url 'federal_misdemeanor_crimes' %}" class="btn btn-warning w-100">Federal Misdemeanors</a>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-3">
+    <div class="col">
+      <a href="{% url 'federal_infraction_crimes' %}" class="btn btn-light w-100">Federal Infractions</a>
+    </div>
+    <div class="col">
+      <a href="{% url 'va_felony_crimes' %}" class="btn btn-danger w-100">Virginia Felonies</a>
+    </div>
+    <div class="col">
+      <a href="{% url 'va_misdemeanor_crimes' %}" class="btn btn-warning w-100">Virginia Misdemeanors</a>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-3">
+    <div class="col">
+      <a href="{% url 'va_infraction_crimes' %}" class="btn btn-light w-100">Virginia Infractions</a>
+    </div>
+    <div class="col">
+      <a href="{% url 'add' %}" class="btn btn-danger w-100">Add Criminal</a>
+    </div>
+    {% if user.is_staff %}
+    <div class="col">
+      <a href="{% url 'mass_add' %}" class="btn btn-warning w-100">Mass Import CSV</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

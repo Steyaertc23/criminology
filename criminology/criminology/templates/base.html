@@ -1,0 +1,240 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{% static 'bootstrap/bootstrap-5.3/css/bootstrap.min.css' %}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="{% static 'images/favicon.png' %}"
+    />
+    {% block metaLinks %}{% endblock %}
+    <title>{% block title %}Title{% endblock %} | DJH Criminal Database</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark mb-4">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}"
+          >DJH Criminal Database</a
+        >
+
+        <!-- Toggle button for collapsed nav -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNavbar"
+          aria-controls="mainNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <!-- Left-aligned links -->
+          <ul class="nav nav-pills mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link {% block homeClass %}{% endblock %}"
+                href="{% url 'home' %}"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% block allClass %}{% endblock %}"
+                href="{% url 'all' %}"
+                >All Criminals</a
+              >
+            </li>
+
+            <!-- Federal dropdown -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="federalDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Federal Offenses
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="federalDropdown">
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{% url 'federal_felony_crimes' %}"
+                    >Felony</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{% url 'federal_misdemeanor_crimes' %}"
+                    >Misdemeanor</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{% url 'federal_infraction_crimes' %}"
+                    >Infraction</a
+                  >
+                </li>
+              </ul>
+            </li>
+
+            <!-- Virginia dropdown -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="vaDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Virginia Offenses
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="vaDropdown">
+                <li>
+                  <a class="dropdown-item" href="{% url 'va_felony_crimes' %}"
+                    >Felony</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{% url 'va_misdemeanor_crimes' %}"
+                    >Misdemeanor</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{% url 'va_infraction_crimes' %}"
+                    >Infraction</a
+                  >
+                </li>
+              </ul>
+            </li>
+
+            {% if user.is_authenticated %} {% if user.is_staff %}
+            <!-- Manage dropdown -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="manageDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Manage
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="manageDropdown">
+                <li>
+                  <a class="dropdown-item" href="{% url 'add' %}"
+                    >Add Single Criminal</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'mass_add' %}"
+                    >Mass Add Criminals</a
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'new_staff_user' %}"
+                    >New Staff User</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'new_users' %}"
+                    >Add Users</a
+                  >
+                </li>
+              </ul>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a
+                class="nav-link {% block addClass %}{% endblock %}"
+                href="{% url 'add' %}"
+                >Add Criminal</a
+              >
+            </li>
+            {% endif %}
+
+            <!-- Account dropdown -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="accountDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Account
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                <li>
+                  <form
+                    action="{% url 'logout' %}"
+                    method="post"
+                    class="d-inline"
+                  >
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item">Logout</button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a
+                class="nav-link {% block loginClass %}{% endblock %}"
+                href="{% url 'login' %}"
+                >Login</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+
+          <!-- Right-aligned search form -->
+          <div class="ms-auto">
+            <form
+              class="d-flex mt-2 mt-lg-0"
+              role="search"
+              onsubmit="return redirectToSearch(this)"
+            >
+              <input
+                class="form-control me-2"
+                type="search"
+                id="searchCriminalName"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button class="btn btn-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">{% block content %}{% endblock %}</div>
+
+    <script src="{% static 'bootstrap/bootstrap-5.3/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/criminology.js' %}"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

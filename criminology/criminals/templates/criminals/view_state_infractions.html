@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}State Infractions{% endblock %}
+
+{% block content %}
+
+  {% if not criminal_sections %}
+  <div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 70vh;">
+    <h1 class="text-center">No State Infractions Reported.</h1>
+  </div>
+  {% else %}
+    <div class="accordion w-100" id="accordionPanelsStayOpenExample" style="max-width: 700px;">
+      {% for section in criminal_sections %}
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapse{{ forloop.counter }}"
+                    aria-expanded="false"
+                    aria-controls="collapse{{ forloop.counter }}">
+              {{ section.label }}
+            </button>
+          </h2>
+          <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
+               aria-labelledby="heading{{ forloop.counter }}"
+               data-bs-parent="#accordionPanelsStayOpenExample">
+            <div class="accordion-body">
+              {% if not section.page_obj %}
+                <p class="text-muted mb-0 text-center">No {{ section.label }}</p>
+              {% else %}
+                <ul class="list-group">
+                  {% for criminal in section.page_obj %}
+                    <li class="list-group-item {% if forloop.counter0|divisibleby:2 %}list-group-item-light{% endif %}">
+                      {{ criminal.first_name }} {{ criminal.last_name }} - {{ criminal.highest_offense.description }}
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+{% endblock %}

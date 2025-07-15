@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Security Question{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Answer Your Security Question</h2>
+  <p class="text-center text-muted">Please answer the security question below to continue.</p>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="security_answer" class="form-label">{{ question }}</label>
+      <input type="text" name="security_answer" id="security_answer" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Verify Answer</button>
+  </form>
+</div>
+{% endblock %}

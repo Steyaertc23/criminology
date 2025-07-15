@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+
+{% block title %}All Criminals{% endblock %}
+{% block allClass %}active{% endblock %}
+
+{% block content %}
+<div class="accordion" id="accordionPanelsStayOpenExample">
+  {% for section in criminal_sections %}
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapse{{ forloop.counter }}"
+                aria-expanded="false"
+                aria-controls="collapse{{ forloop.counter }}">
+          {{ section.label }}
+        </button>
+      </h2>
+      <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
+           aria-labelledby="heading{{ forloop.counter }}"
+           data-bs-parent="#accordionPanelsStayOpenExample">
+        <div class="accordion-body">
+          {% if not section.page_obj %}
+            <p class="text-muted mb-0">No {{ section.label }}</p>
+          {% else %}
+            <ul class="list-group" id="list-{{ forloop.counter }}">
+              {% for criminal in section.page_obj %}
+                <li class="list-group-item {% if forloop.counter0|divisibleby:2 %}list-group-item-light{% endif %}">
+                  {{ criminal.first_name }} {{ criminal.last_name }} - 
+                  {{ criminal.highest_offense.get_offense_type_display }} {{ criminal.highest_offense.offense_class }}
+                </li>
+              {% endfor %}
+            </ul>
+
+            {% if section.page_obj.has_next %}
+              <button type="button"
+                      class="btn btn-primary mt-2"
+                      data-group="{{ forloop.counter }}"
+                      data-offset="{{ section.page_obj.end_index }}"
+                      data-label="{{ section.label }}"
+                      onclick="loadMoreCriminals(this)">
+                Load More
+              </button>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
